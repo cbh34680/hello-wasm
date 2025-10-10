@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <script src="build/08_modularize.js"></script>
+        <script src="build/08_modularize_alias.js"></script>
+        <script>
+            document.addEventListener('DOMContentLoaded', function()
+            {
+                let v = 0;
+
+                Module({arguments: ['Default']}).then(mod =>
+                {
+                    v = mod._increment(v);
+                    console.log(`return=${v}`);
+                });
+
+                AliasModule({arguments: ['Alias']}).then(mod =>
+                {
+                    v = mod._increment(v);
+                    console.log(`return=${v}`);
+                });
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
