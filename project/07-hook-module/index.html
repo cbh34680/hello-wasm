@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <script src="build/07_hook_module.js"></script>
+        <script>
+            Module.arguments.push('WORLD');
+
+            Module.monitorRunDependencies = runDependencies => {
+                console.log(`monitorRunDependencies(${runDependencies})`);
+            };
+
+            Module.preRun = [
+                mod => { console.log('preRun'); },
+            ];
+
+            Module.setStatus = msg => {
+                console.log(`setStatus(${msg})`);
+            };
+
+            Module.onRuntimeInitialized = () => {
+                console.log('onRuntimeInitialized');
+            };
+
+            Module.postRun = [
+                mod => { console.log('postRun'); },
+            ];
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
