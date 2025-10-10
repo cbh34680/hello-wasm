@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <script type="module">
+            import DefaultModule from './build/09_modularize_es6.js';
+            import AliasModule from './build/09_modularize_es6_alias.js';
+
+            document.addEventListener('DOMContentLoaded', function()
+            {
+                let v = 0;
+
+                DefaultModule({arguments: ['Default']}).then(mod =>
+                {
+                    v = mod._increment(v);
+                    console.log(`return=${v}`);
+                });
+
+                AliasModule({arguments: ['Alias']}).then(mod =>
+                {
+                    v = mod._increment(v);
+                    console.log(`return=${v}`);
+                });
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
