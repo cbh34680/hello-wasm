@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <script src="build/05_dll_dlopen_main.js"></script>
+        <script>
+            const cpp_func_example = () =>
+            {
+                let v = 0;
+                let s = '';
+
+                // 数値を扱う関数: ccall による呼び出し
+                v = Module.ccall('increment', 'number', ['number'], [v]);
+                console.log(`return=${v}`);
+
+                // 数値を扱う関数: wasmExports を利用した呼び出し
+                v = Module.wasmExports.increment(v);
+                console.log(`return=${v}`);
+
+                // 数値を扱う関数: 直接呼出し
+                v = Module._increment(v);
+                console.log(`return=${v}`);
+
+                // 文字列を扱う関数: ccall による呼び出し
+                v = Module.ccall('str_repeat', 'number', ['string', 'number'], ['HELLO1 ', 3]);
+                s = Module.UTF8ToString(v);
+                Module._free(v);
+                console.log(`return=${s}`);
+
+                // 文字列を扱う関数: wasmExports を利用した呼び出し
+                v = Module.stringToUTF8OnStack('HELLO2 ');
+                v = Module.wasmExports.str_repeat(v, 3);
+                s = Module.UTF8ToString(v);
+                Module._free(v);
+                console.log(`return=${s}`);
+
+                // 数値配列を扱う関数
+                const js_nums = Array.from({ length: 10 }, (_, i) => i + 1);
+                const intptr = Module._malloc(js_nums.length * Module.HEAP32.BYTES_PER_ELEMENT);
+                Module.HEAP32.set(js_nums, intptr / Module.HEAP32.BYTES_PER_ELEMENT);
+                v = Module.wasmExports.sum(intptr, js_nums.length);
+                console.log(`return=${v}`);
+                Module._free(intptr);
+            };
+
+            Module.onRuntimeInitialized = () =>
+            {
+                fetch('/build/05_dll_dlopen_side.wasm')
+                    .then(response => response.arrayBuffer())
+                    .then(buffer => {
+                        const byteArray = new Uint8Array(buffer);
+                        FS.writeFile('/side.wasm', byteArray);
+
+                        Module._initSideModule(Module.stringToUTF8OnStack('/side.wasm'));
+
+                        cpp_func_example();
+                    });
+            };
+        </script>
+    </head>
+    <body>
+    </body>
+</html>

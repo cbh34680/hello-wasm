@@ -1,0 +1,7 @@
+clang+llvm-21.1.0-x86_64-pc-windows-msvc
+cmake-4.1.2-windows-x86_64
+emsdk-4.0.16
+ninja-win
+python-3.14.0-embed-amd64
+wabt-1.0.37-windows
+wasmtime-v37.0.2-x86_64-windows
