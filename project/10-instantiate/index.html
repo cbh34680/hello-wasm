@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <script type="module">
+            import DefaultModule from './build/Debug/10_instantiate.js';
+            const wasmPath = './build/Debug/10_instantiate.wasm';
+
+            document.addEventListener('DOMContentLoaded', function()
+            {
+                let v = 0;
+
+                const onRuntimeInitialized = () => console.log('onRuntimeInitialized');
+
+                //
+                // インスタンス化方法 (1)
+                //
+                const argsCompileInstantiate = {
+                    arguments: ['compile', 'instantiate'],
+                    instantiateWasm: async (imports, successCallback) =>
+                    {
+                        // 1) fetch() によりダウンロード
+                        // 2) ダウンロード結果をバイト配列に展開
+                        // 3) バイト配列をコンパイルして WebAssemblyモジュールを生成
+                        // 4) WebAssemblyモジュールと imports から WebAssemblyインスタンスを生成
+
+                        const response = await fetch(wasmPath);
+                        const bytes = await response.arrayBuffer();
+                        const wasmModule = await WebAssembly.compile(bytes);
+                        const wasmInstance = await WebAssembly.instantiate(wasmModule, imports);
+
+                        successCallback(wasmInstance);
+                    },
+                    onRuntimeInitialized,
+                };
+
+                DefaultModule(argsCompileInstantiate).then(emsModule =>
+                {
+                    // Emscripten モジュールにより C++ の関数を呼び出す
+
+                    v = emsModule._increment(v);
+                    console.log(`return=${v}`);
+                });
+
+                //
+                // インスタンス化方法 (2)
+                //
+                const argsCompileStreaming = {
+                    arguments: ['compileStreaming', 'instantiate'],
+                    instantiateWasm: async (imports, successCallback) =>
+                    {
+                        // 1) fetch() によりダウンロード
+                        // 2) ダウンロード結果から WebAssemblyモジュールを生成
+                        // 3) WebAssemblyモジュールと imports から WebAssemblyインスタンスを生成
+
+                        const response = await fetch(wasmPath);
+                        const wasmModule = await WebAssembly.compileStreaming(response);
+                        const wasmInstance = await WebAssembly.instantiate(wasmModule, imports);
+
+                        successCallback(wasmInstance);
+                    },
+                    onRuntimeInitialized,
+                };
+
+                DefaultModule(argsCompileStreaming).then(emsModule =>
+                {
+                    // Emscripten モジュールにより C++ の関数を呼び出す
+
+                    v = emsModule._increment(v);
+                    console.log(`return=${v}`);
+                });
+
+                //
+                // インスタンス化方法 (3)
+                //
+                const argsInstantiateStreaming = {
+                    arguments: ['instantiateStreaming'],
+                    instantiateWasm: async (imports, successCallback) =>
+                    {
+                        // 1) fetch() によりダウンロード
+                        // 2) ダウンロード結果から WebAssemblyモジュールと WebAssemblyインスタンスを生成
+
+                        const response = await fetch(wasmPath);
+                        const {instance:wasmInstance, module:wasmModule} = await WebAssembly.instantiateStreaming(response, imports);
+
+                        successCallback(wasmInstance);
+                    },
+                    onRuntimeInitialized,
+                };
+
+                DefaultModule(argsInstantiateStreaming).then(emsModule =>
+                {
+                    // Emscripten モジュールにより C++ の関数を呼び出す
+
+                    v = emsModule._increment(v);
+                    console.log(`return=${v}`);
+                });
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
