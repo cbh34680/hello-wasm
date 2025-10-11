@@ -7,8 +7,9 @@
   },
   "configurePresets": [
     {
-      "name": "wasm-config-debug",
-      "generator": "Ninja",
+      "name": "wasm-config",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
       "binaryDir": "${sourceDir}/build",
       "cacheVariables": {
         "CMAKE_CXX_STANDARD": "17",
@@ -16,7 +17,19 @@
         "CMAKE_CXX_EXTENSIONS": "OFF",
         "CMAKE_TOOLCHAIN_FILE": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
         "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
-        "CMAKE_BUILD_TYPE": "Debug"
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release"
+      }
+    },
+    {
+      "name": "wasm-config-debug",
+      "inherits": "wasm-config",
+      "cacheVariables": {
+      }
+    },
+    {
+      "name": "wasm-config-release",
+      "inherits": "wasm-config",
+      "cacheVariables": {
       }
     }
   ],
@@ -24,7 +37,14 @@
     {
       "name": "wasm-build-debug",
       "configurePreset": "wasm-config-debug",
-      "verbose": true
+      "verbose": true,
+      "configuration": "Debug"
+    },
+    {
+      "name": "wasm-build-release",
+      "configurePreset": "wasm-config-release",
+      "verbose": true,
+      "configuration": "Release"
     }
   ]
 }
