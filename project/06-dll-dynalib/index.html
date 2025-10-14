@@ -43,6 +43,11 @@
                 Module._free(intptr);
             };
 
+            Module.monitorRunDependencies = left =>
+            {
+                console.log(`left=${left}`);
+            };
+
             Module.onRuntimeInitialized = () =>
             {
                 cpp_func_example();
