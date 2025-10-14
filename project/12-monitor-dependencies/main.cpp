@@ -11,25 +11,6 @@ int increment(int v)
 	return v + 1;
 }
 
-void print_file(const char* path)
-{
-	std::cout << "path=" << path << std::endl;
-	
-	std::ifstream ifs{ path };
-	if (ifs)
-	{
-	    std::string line;
-    	while (std::getline(ifs, line))
-		{
-	        std::cout << "DATA: " << line << std::endl;
-    	}
-	}
-	else
-	{
-		std::cerr << "file open error" << std::endl;
-	}
-}
-
 int main(int argc, char** argv)
 {
 	std::cout << "C++ main(argc=" << argc << ", argv=[";
@@ -44,8 +25,20 @@ int main(int argc, char** argv)
 
 	std::cout << "])" << std::endl;
 
-	print_file("/data1.txt");
-	print_file("/data2.txt");
+	std::cout << "open: " << argv[1] << std::endl;
+	std::ifstream ifs{ argv[1] };
+	if (ifs)
+	{
+	    std::string line;
+    	while (std::getline(ifs, line))
+		{
+	        std::cout << "DATA: " << line << std::endl;
+    	}
+	}
+	else
+	{
+		std::cerr << "file open error" << std::endl;
+	}
 
 	return 0;
 }

@@ -4,47 +4,30 @@
         <meta charset="utf-8"/>
         <script type="module">
             import Module from './build/Debug/12_monitor_dependencies.js';
+            const fs_data_path = '/data.txt';
 
             let v = 0;
 
             const moduleArgs = {
-                arguments: ['monitor', 'dependencies'],
+                arguments: [fs_data_path],
                 monitorRunDependencies: left => console.log(`left ${left}`),
+                preRun: [
+                    emsModule => {
+                        emsModule.addRunDependency('data');
+
+                        fetch('./data.txt')
+                            .then(response => response.arrayBuffer())
+                            .then(buffer => {
+                                console.log('write file');
+                                emsModule.FS.writeFile(fs_data_path, new Uint8Array(buffer));
+
+                                emsModule.removeRunDependency('data');
+                            });
+                    },
+                ],
             };
 
-            moduleArgs.preRun = [
-                //
-                // 以下の二つはファイル名が異なるだけ
-                //
-                () => {
-                    moduleArgs.addRunDependency('data1');
-
-                    fetch('./data1.txt')
-                        .then(response => response.arrayBuffer())
-                        .then(buffer => {
-                            console.log('write file1');
-                            moduleArgs.FS.writeFile('/data1.txt', new Uint8Array(buffer));
-
-                            moduleArgs.removeRunDependency('data1');
-                        });
-                },
-                () => {
-                    moduleArgs.addRunDependency('data2');
-
-                    fetch('./data2.txt')
-                        .then(response => response.arrayBuffer())
-                        .then(buffer => {
-                            console.log('write file2');
-                            moduleArgs.FS.writeFile('/data2.txt', new Uint8Array(buffer));
-
-                            moduleArgs.removeRunDependency('data2');
-                        });
-                },
-            ];
-
-            const modulePromise = Module(moduleArgs);
-
-            await modulePromise.then(emsModule =>
+            await Module(moduleArgs).then(emsModule =>
             {
                 v = emsModule._increment(v);
                 console.log(`return=${v}`);
