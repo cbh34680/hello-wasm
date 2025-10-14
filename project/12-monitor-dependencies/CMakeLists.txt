@@ -5,6 +5,5 @@ add_executable(12_monitor_dependencies main.cpp)
 target_link_options(12_monitor_dependencies PRIVATE
     $<$<CONFIG:Debug>:-gsource-map -sASSERTIONS=1 -sSAFE_HEAP=1>
     "-sEXPORTED_RUNTIME_METHODS=addRunDependency,removeRunDependency,FS"
-    "-sFORCE_FILESYSTEM=1"
     "-sEXPORT_ES6"
 )
