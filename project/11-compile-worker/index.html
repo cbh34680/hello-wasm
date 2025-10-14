@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <script type="module">
+            import Module from './build/Debug/11_compile_worker.js';
+            const worker = new Worker('./worker.js');
+
+            worker.onmessage = e => {
+                console.log('on message');
+                const wasmModule = e.data;
+
+                const moduleInfo = {
+                    arguments: ['compile', 'worker'],
+                    instantiateWasm: async (imports, successCallback) =>
+                    {
+                        const wasmInstance = await WebAssembly.instantiate(wasmModule, imports);
+                        console.log('instantiate');
+
+                        successCallback(wasmInstance);
+                    },
+                };
+
+                let v = 0;
+
+                Module(moduleInfo).then(emsModule =>
+                {
+                    // Emscripten モジュールにより C++ の関数を呼び出す
+
+                    v = emsModule._increment(v);
+                    console.log(`return=${v}`);
+                });
+
+            };
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
