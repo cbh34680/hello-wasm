@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <script type="module">
+            import Module from './build/Debug/13_envvar.js';
+
+            let v = 0;
+
+            const moduleArgs = {
+                arguments: ['environment', 'variables'],
+                preRun: [
+                    emsModule => {
+                        emsModule.ENV['APP_LOCATION'] = window.location.href;
+                    },
+                ]
+            };
+
+            await Module(moduleArgs).then(emsModule =>
+            {
+                v = emsModule._increment(v);
+                console.log(`return=${v}`);
+            });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
