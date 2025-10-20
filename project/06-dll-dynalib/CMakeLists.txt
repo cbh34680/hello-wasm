@@ -24,7 +24,6 @@ target_link_options(06_dll_dynalib_side PRIVATE
     "-sSIDE_MODULE=2"
 )
 set_target_properties(06_dll_dynalib_side PROPERTIES
-    OUTPUT_NAME "06_dll_dynalib_side"
     PREFIX ""
     SUFFIX ".wasm" 
 )

@@ -23,7 +23,6 @@ target_link_options(05_dll_dlopen_side PRIVATE
     "-sSIDE_MODULE=2"
 )
 set_target_properties(05_dll_dlopen_side PROPERTIES
-    OUTPUT_NAME "05_dll_dlopen_side"
     PREFIX ""
     SUFFIX ".wasm" 
 )
