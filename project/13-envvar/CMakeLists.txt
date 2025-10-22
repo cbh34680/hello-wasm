@@ -5,5 +5,5 @@ add_executable(13_envvar main.cpp)
 target_link_options(13_envvar PRIVATE
     $<$<CONFIG:Debug>:-gsource-map -sASSERTIONS=1 -sSAFE_HEAP=1>
     "-sEXPORTED_RUNTIME_METHODS=ENV"
-    "-sEXPORT_ES6"
+    "-sEXPORT_ES6=1"
 )

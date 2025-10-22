@@ -36,7 +36,7 @@
 
                 DefaultModule(argsCompileInstantiate).then(emsModule =>
                 {
-                    // Emscripten モジュールにより C++ の関数を呼び出す
+                    // Emscripten ランタイム・モジュールにより C++ の関数を呼び出す
 
                     v = emsModule._increment(v);
                     console.log(`return=${v}`);
@@ -64,7 +64,7 @@
 
                 DefaultModule(argsCompileStreaming).then(emsModule =>
                 {
-                    // Emscripten モジュールにより C++ の関数を呼び出す
+                    // Emscripten ランタイム・モジュールにより C++ の関数を呼び出す
 
                     v = emsModule._increment(v);
                     console.log(`return=${v}`);
@@ -90,7 +90,7 @@
 
                 DefaultModule(argsInstantiateStreaming).then(emsModule =>
                 {
-                    // Emscripten モジュールにより C++ の関数を呼び出す
+                    // Emscripten ランタイム・モジュールにより C++ の関数を呼び出す
 
                     v = emsModule._increment(v);
                     console.log(`return=${v}`);

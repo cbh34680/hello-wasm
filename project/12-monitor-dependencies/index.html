@@ -27,7 +27,7 @@
                 ],
             };
 
-            await Module(moduleArgs).then(emsModule =>
+            Module(moduleArgs).then(emsModule =>
             {
                 v = emsModule._increment(v);
                 console.log(`return=${v}`);

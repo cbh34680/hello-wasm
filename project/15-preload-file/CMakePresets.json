@@ -1,0 +1,50 @@
+{
+  "version": 5,
+  "cmakeMinimumRequired": {
+    "major": 3,
+    "minor": 20,
+    "patch": 0
+  },
+  "configurePresets": [
+    {
+      "name": "wasm-config",
+      "hidden": true,
+      "generator": "Ninja Multi-Config",
+      "binaryDir": "${sourceDir}/build",
+      "cacheVariables": {
+        "CMAKE_CXX_STANDARD": "17",
+        "CMAKE_CXX_STANDARD_REQUIRED": "ON",
+        "CMAKE_CXX_EXTENSIONS": "OFF",
+        "CMAKE_TOOLCHAIN_FILE": "$env{EMSDK}/upstream/emscripten/cmake/Modules/Platform/Emscripten.cmake",
+        "CMAKE_EXPORT_COMPILE_COMMANDS": "ON",
+        "CMAKE_CONFIGURATION_TYPES": "Debug;Release"
+      }
+    },
+    {
+      "name": "wasm-config-debug",
+      "inherits": "wasm-config",
+      "cacheVariables": {
+      }
+    },
+    {
+      "name": "wasm-config-release",
+      "inherits": "wasm-config",
+      "cacheVariables": {
+      }
+    }
+  ],
+  "buildPresets": [
+    {
+      "name": "wasm-build-debug",
+      "configurePreset": "wasm-config-debug",
+      "verbose": true,
+      "configuration": "Debug"
+    },
+    {
+      "name": "wasm-build-release",
+      "configurePreset": "wasm-config-release",
+      "verbose": true,
+      "configuration": "Release"
+    }
+  ]
+}
