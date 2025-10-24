@@ -9,7 +9,15 @@
 
             const monitorRunDependencies = left => console.log(`left ${left}`);
 
-            Module({ arguments: ['data.txt'], monitorRunDependencies }).then(emsModule =>
+            const locateFile = (path, prefix) => {
+                if (path.endsWith(".data")) {
+                    return './build/Debug/' + path;
+                }
+
+                return prefix + path;
+            };
+
+            Module({ arguments: ['data.txt'], monitorRunDependencies, locateFile }).then(emsModule =>
             {
                 v = emsModule._increment(v);
                 console.log(`return=${v}`);
