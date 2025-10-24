@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ja">
+    <head>
+        <meta charset="utf-8"/>
+        <script type="module">
+            import Module from './build/Debug/16_awk.js';
+
+            const locateFile = (path, prefix) => {
+                console.log(`locateFile(path=${path}, prefix=${prefix})`)
+
+                if (path.endsWith(".data")) {
+                    return './build/Debug/' + path;
+                }
+
+                return prefix + path;
+            };
+
+            const preRun = [
+                emsModule => { console.log('# AWK-START'); },
+            ];
+
+            const postRun = [
+                emsModule => { console.log('# DONE.'); },
+            ];
+
+            const args = [
+                '--csv',
+                'NR!=1 {print $14,$11,$12;} NR>5 {exit;}',
+                'address-sample.csv'
+            ];
+
+            await Module({ arguments: args, locateFile, preRun, postRun });
+        </script>
+    </head>
+    <body>
+    </body>
+</html>
