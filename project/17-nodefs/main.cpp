@@ -3,20 +3,13 @@
 #include <iostream>
 #include <chrono>
 #include <fstream>
+#include <cstdlib>
+
+static void print_args(int argc, char** argv);
 
 int main(int argc, char** argv, char** envp)
 {
-	std::cout << "C++ main(argc=" << argc << ", argv=[";
-
-	for (int i=0; i<argc; ++i)
-	{
-		if (i) {
-			std::cout << ",";
-		}
-		std::cout << "'" << argv[i] << "'";
-	}
-
-	std::cout << "])" << std::endl;
+	print_args(argc, argv);
 
 	std::string esFullPath{ argv[1] };
 
@@ -35,12 +28,26 @@ int main(int argc, char** argv, char** envp)
 		std::tm tm = *std::localtime(&t);
 		char buf[64];
 		std::strftime(buf, sizeof(buf), "%Y/%m/%d %H:%M:%S", &tm);
-		ofs << "C++: " << buf << std::endl;
+		ofs << "|C++: " << buf << std::endl;
 		ofs.close();
 	}
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 
+void print_args(int argc, char** argv)
+{
+	std::cout << "C++ main(argc=" << argc << ", argv=[";
+
+	for (int i=0; i<argc; ++i)
+	{
+		if (i) {
+			std::cout << ",";
+		}
+		std::cout << "'" << argv[i] << "'";
+	}
+
+	std::cout << "])" << std::endl;
+}
 
 // EOF
